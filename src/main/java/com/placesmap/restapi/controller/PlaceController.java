@@ -32,4 +32,15 @@ public class PlaceController {
         ResponseEntity<String> response = restTemplate.getForEntity(callURL, String.class);
         return response;
     }
+
+    @GetMapping("/photo")
+    public ResponseEntity<byte[]> photo(@RequestParam String photoreference, @RequestParam Integer maxheight, @RequestParam Integer maxwidth) {
+        String endpoint = "/maps/api/place/photo";
+        String callURL = apiUrl + endpoint + 
+            "?photoreference=" + photoreference + 
+            "&maxheight=" + maxheight.toString() + 
+            "&maxwidth=" + maxheight.toString();
+        ResponseEntity<byte[]> response = restTemplate.getForEntity(callURL, byte[].class);
+        return response;
+    }
 }
