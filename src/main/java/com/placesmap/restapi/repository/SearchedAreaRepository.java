@@ -17,9 +17,13 @@ public interface SearchedAreaRepository extends JpaRepository<SearchedArea, Inte
             "SELECT * " +
             "FROM searched_areas " +
             "WHERE " +
-                "SQRT(POW(lat - :lat, 2) + POW(lng - :lng, 2)) * 111 < 1 " + // distance between two points (scale: max 1km)
-                "AND " +
-                "radius = :radius "
+                "SQRT(POW(lat - :lat, 2) + POW(lng - :lng, 2)) " + // distance between two points
+                " * 111000 " + // approximate length (m) of one degree
+                " + :radius " + // the entire area of the circle
+                "< " + // if it inside
+                "radius + 0.1 " + // in search area
+                " AND " +
+                "ABS(radius - :radius) < 1000" // for scaling to minimize the margin of error
     )
     public List<SearchedArea> searchedBefore(@Param("lat") float lat, @Param("lng") float lng, @Param("radius") float radius);
 }
