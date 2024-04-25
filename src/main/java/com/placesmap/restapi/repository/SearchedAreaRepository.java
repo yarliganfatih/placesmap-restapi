@@ -11,6 +11,15 @@ import com.placesmap.restapi.model.SearchedArea;
 
 @Repository
 public interface SearchedAreaRepository extends JpaRepository<SearchedArea, Integer> {
-    @Query(value = "SELECT * FROM searched_areas WHERE lat = :lat AND lng = :lng AND radius = :radius", nativeQuery = true)
+    @Query(
+        nativeQuery = true,
+        value = 
+            "SELECT * " +
+            "FROM searched_areas " +
+            "WHERE " +
+                "SQRT(POW(lat - :lat, 2) + POW(lng - :lng, 2)) * 111 < 1 " + // distance between two points (scale: max 1km)
+                "AND " +
+                "radius = :radius "
+    )
     public List<SearchedArea> searchedBefore(@Param("lat") float lat, @Param("lng") float lng, @Param("radius") float radius);
 }
