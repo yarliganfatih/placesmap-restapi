@@ -54,6 +54,9 @@ public class PlaceController {
             "?location=" + lat.toString() + "," + lng.toString() + 
             "&radius=" + radius.toString() + 
             "&key=" + googleApiKey;
+        // TODO
+        //ApiResponse response = restTemplate.getForObject(callURL, ApiResponse.class);
+        //System.out.println(response.getResults().get(1).getGeometry().getLocation().getLat());
         ResponseEntity<String> response = restTemplate.getForEntity(callURL, String.class);
         saveForReuse(lat, lng, radius, response.getBody());
         return response;
